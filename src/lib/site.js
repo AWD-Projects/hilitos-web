@@ -7,7 +7,6 @@ export const SITE_URL = (
 
 export const BUSINESS = {
   name: "Hilitos Lili",
-  owner: "Lilia Ortega",
   phoneDisplay: "55 4107 2124",
   phoneE164: "+525541072124",
   whatsappNumber: "525541072124",
@@ -39,7 +38,7 @@ export const NAV = [
   { id: "contacto", label: "Contacto" },
 ];
 
-// Cifras que ya estaban publicadas en el sitio del cliente. Confirmar con Lilia antes de difundirlas.
+// Cifras que ya estaban publicadas en el sitio del cliente. Confirmar con el cliente antes de difundirlas.
 export const FACTS = {
   garments: "+1,200",
   years: "10+",

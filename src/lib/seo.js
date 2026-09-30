@@ -27,7 +27,6 @@ export function jsonLd() {
         },
         telephone: "+52 55 4107 2124",
         email: BUSINESS.email,
-        founder: { "@type": "Person", name: BUSINESS.owner },
         address: {
           "@type": "PostalAddress",
           streetAddress: BUSINESS.street,

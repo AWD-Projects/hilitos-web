@@ -66,10 +66,10 @@ export default function Nosotros() {
           <div className="lg:col-span-7">
             <Reveal>
               <h2 className="h-section">
-                El taller de Lilia Ortega
+                Un taller para darle otra vida a tu ropa
               </h2>
               <p className="lead mt-6 max-w-[38rem]">
-                Lilia abrió Hilitos Lili para rescatar prendas queridas y darles otra historia en cada costura. Hoy atiende a
+                Hilitos Lili nació para rescatar prendas queridas y darles otra historia en cada costura. Hoy atiende a
                 sus clientas en ajustes del diario, transformaciones y ropa hecha a la medida.
               </p>
             </Reveal>
