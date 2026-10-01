@@ -4,54 +4,21 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { buildQuoteMessage, waLink } from "../lib/whatsapp";
 
 const QuoteContext = createContext(null);
-const STORAGE_KEY = "hilitos.nota.v1";
+const OLD_STORAGE_KEY = "hilitos.nota.v1";
 const MAX_ITEMS = 20;
-
-const clean = (value, max) => (typeof value === "string" ? value.slice(0, max) : "");
-
-function sanitizeItems(raw) {
-  if (!Array.isArray(raw)) return [];
-  return raw
-    .filter((i) => i && typeof i === "object" && typeof i.garment === "string")
-    .slice(0, MAX_ITEMS)
-    .map((i) => ({
-      id: clean(String(i.id || ""), 40) || `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      garmentId: clean(i.garmentId, 30),
-      garment: clean(i.garment, 40),
-      services: Array.isArray(i.services) ? i.services.map((s) => clean(s, 60)).slice(0, 8) : [],
-      qty: Math.min(Math.max(parseInt(i.qty, 10) || 1, 1), 20),
-      note: clean(i.note, 300),
-    }));
-}
 
 export function QuoteProvider({ children }) {
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
-  const [ready, setReady] = useState(false);
 
-  // La nota sobrevive a un refresco de página. El almacenamiento puede no existir: todo va en try/catch.
+  // La nota vive solo en memoria: un refresco la deja en blanco. Borra lo que guardó la versión anterior.
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const data = JSON.parse(raw);
-        setItems(sanitizeItems(data.items));
-        setName(clean(data.name, 60));
-      }
+      window.localStorage.removeItem(OLD_STORAGE_KEY);
     } catch (_) {
-      /* sin almacenamiento: la nota vive solo en memoria */
+      /* sin almacenamiento */
     }
-    setReady(true);
   }, []);
-
-  useEffect(() => {
-    if (!ready) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, name }));
-    } catch (_) {
-      /* ignorar */
-    }
-  }, [items, name, ready]);
 
   const add = useCallback((item) => {
     setItems((prev) =>
