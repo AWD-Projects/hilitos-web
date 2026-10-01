@@ -1,62 +1,64 @@
-import Link from "next/link";
 import Image from "next/image";
-
-const navLinks = [
-  { href: "#inicio", label: "Inicio" },
-  { href: "#nosotros", label: "Nosotros" },
-  { href: "#servicios", label: "Servicios" },
-  { href: "#contacto", label: "Contacto" },
-];
+import { NAV, BUSINESS } from "../lib/site";
 
 export default function Footer() {
+  const year = new Date().getFullYear();
   return (
     <footer className="site-footer">
-      <div className="container-base footer-inner grid gap-12 md:grid-cols-[1.2fr_1fr_1fr]">
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center">
-              <Image src="/images/footer-logo.png" alt="Hilitos Lili" width={60} height={60} />
-            </span>
-            <div className="sr-only">Hilitos Lili</div>
-          </div>
-          <p className="text-sm text-white/70">
-            Taller de prendas femeninas en CDMX. Cuidamos cada detalle para que tu ropa
-            vuelva a sentirse como nueva.
-          </p>
-          <div className="flex items-center gap-3 text-sm text-white/70">
-            <span className="h-1 w-8 rounded-full bg-white/60"></span>
-            +52 55 4107 2124
-          </div>
+      <div className="seam-light" aria-hidden="true" />
+      <div className="container-base grid gap-12 py-16 md:grid-cols-12 md:py-20">
+        <div className="md:col-span-5">
+          <Image
+            src="/brand/wordmark-light.png"
+            alt="Hilitos Lili"
+            width={720}
+            height={525}
+            sizes="144px"
+            className="h-auto w-36"
+          />
+          <p className="mt-5 max-w-xs text-white/80">Un taller de costura en {BUSINESS.colonia}.</p>
         </div>
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/80">
-            Navegación
-          </h3>
-          <ul className="mt-4 space-y-3 text-sm text-white/70">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className="hover:text-white">
-                  {link.label}
-                </Link>
+
+        <nav aria-label="Pie de página" className="md:col-span-3">
+          <p className="font-display text-[1.15rem] italic text-white">Ir a</p>
+          <ul className="mt-4 space-y-1">
+            {NAV.map((link) => (
+              <li key={link.id}>
+                <a href={`#${link.id}`} className="inline-flex min-h-[2.5rem] items-center text-white/80">
+                  <span className="link-line">{link.label}</span>
+                </a>
               </li>
             ))}
           </ul>
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/80">
-            Contacto
-          </h3>
-          <ul className="mt-4 space-y-3 text-sm text-white/70">
-            <li>Cerro de la Estrella 289 Local B, Campestre Churubusco, CDMX</li>
-            <li>hilitoslili@gmail.com</li>
-            <li>Lun - Sáb: 11:30 a 19:00</li>
-            <li>Domingo: Cerrado</li>
+        </nav>
+
+        <div className="md:col-span-4">
+          <p className="font-display text-[1.15rem] italic text-white">Hablemos</p>
+          <ul className="mt-4 space-y-1">
+            <li>
+              <a href={`tel:${BUSINESS.phoneE164}`} className="inline-flex min-h-[2.5rem] items-center text-white/80">
+                <span className="link-line">{BUSINESS.phoneDisplay}</span>
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${BUSINESS.email}`} className="inline-flex min-h-[2.5rem] items-center break-all text-white/80">
+                <span className="link-line">{BUSINESS.email}</span>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
-      <div className="footer-bottom">
-        © 2026 Hilitos Lili. Todos los derechos reservados. Desarrollado por Amoxtli Web
-        Developers.
+
+      <div className="border-t border-white/15">
+        <div className="container-base flex flex-col gap-2 py-6 pb-24 text-[0.9rem] text-white/75 sm:flex-row sm:items-center sm:justify-between md:pb-6">
+          <p>© {year} Hilitos Lili. Todos los derechos reservados.</p>
+          <p>
+            Desarrollado por{" "}
+            <a href="https://amoxtli.tech" target="_blank" rel="noopener noreferrer" className="font-semibold text-white">
+              <span className="link-line">AMOXTLI®</span>
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );

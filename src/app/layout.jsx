@@ -1,118 +1,111 @@
 import "../styles/globals.css";
-import { Poppins, Josefin_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import StickyCta from "../components/StickyCta";
+import { QuoteProvider } from "../components/QuoteProvider";
+import MotionProvider from "../components/MotionProvider";
+import { jsonLd } from "../lib/seo";
+import { GA_ID, INDEXABLE, SITE_URL } from "../lib/site";
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-sans",
+// Fuentes autoalojadas (licencia OFL): no dependen de Google Fonts al compilar ni al visitar.
+const display = localFont({
+  src: [
+    { path: "../fonts/fraunces-latin-wght-normal.woff2", style: "normal", weight: "100 900" },
+    { path: "../fonts/fraunces-latin-wght-italic.woff2", style: "italic", weight: "100 900" },
+  ],
+  variable: "--font-display",
+  display: "swap",
 });
 
-const josefin = Josefin_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-serif",
+const text = localFont({
+  src: [{ path: "../fonts/hanken-grotesk-latin-wght-normal.woff2", style: "normal", weight: "100 900" }],
+  variable: "--font-text",
+  display: "swap",
 });
+
+const TITLE = "Hilitos Lili | Modistería y composturas en Coyoacán, CDMX";
+const DESCRIPTION =
+  "Modistería en Coyoacán: dobladillos, entalles, cierres, zurcidos y ropa a la medida. Arma tu nota de taller y cotiza por WhatsApp.";
 
 export const metadata = {
-  title: {
-    default: "Hilitos Lili | Compostura y confección a tu medida",
-    template: "%s | Hilitos Lili",
-  },
-  description:
-    "Hilitos Lili es un taller de compostura y confección personalizada de prendas femeninas en CDMX. Ajustes, diseños únicos y atención detallista.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: "%s | Hilitos Lili" },
+  description: DESCRIPTION,
+  applicationName: "Hilitos Lili",
   keywords: [
-    "compostura",
-    "confección",
-    "modista",
-    "ajustes de ropa",
-    "prendas femeninas",
-    "CDMX",
-    "bordados",
-    "taller de costura",
+    "modistería Coyoacán",
+    "composturas de ropa CDMX",
+    "dobladillos",
+    "entalle de ropa",
+    "cambio de cierre",
+    "zurcido",
+    "ropa a la medida",
     "Hilitos Lili",
   ],
-  metadataBase: new URL("https://hilitoslili.netlify.app"),
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/", languages: { "es-MX": "/" } },
   openGraph: {
-    title: "Hilitos Lili",
-    description:
-      "Compostura y confección personalizada con más de 10 años de experiencia."
-    ,
-    url: "https://hilitoslili.netlify.app",
+    type: "website",
+    url: "/",
     siteName: "Hilitos Lili",
     locale: "es_MX",
-    type: "website",
+    title: TITLE,
+    description: DESCRIPTION,
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Hilitos Lili",
-    description:
-      "Compostura y confección personalizada con más de 10 años de experiencia.",
-  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
   robots: {
-    index: true,
-    follow: true,
+    index: INDEXABLE,
+    follow: INDEXABLE,
+    googleBot: {
+      index: INDEXABLE,
+      follow: INDEXABLE,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
-  icons: {
-    icon: "/favicon.png",
-  },
+  verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION }
+    : undefined,
 };
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-98H8KRKT85";
-const JSON_LD = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: "Hilitos Lili",
-  description:
-    "Taller de compostura y confección personalizada de prendas femeninas en CDMX.",
-  telephone: "+52 55 4107 2124",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Cerro de la Estrella 289 Local B, Campestre Churubusco",
-    addressLocality: "Ciudad de México",
-    addressCountry: "MX",
-  },
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      opens: "11:30",
-      closes: "19:00",
-    },
-  ],
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#8F68A2",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={`${poppins.variable} ${josefin.variable}`}>
-      <body className="font-sans">
-        <a href="#inicio" className="skip-link">Saltar al contenido</a>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <Script
-          id="ld-json"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
-        />
-        {GA_ID && (
-          <>
-            <Script
-              strategy="afterInteractive"
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-            />
-            <Script id="ga-init" strategy="afterInteractive">
-              {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);} 
+    <html lang="es-MX" className={`${display.variable} ${text.variable}`}>
+      <body>
+        <noscript>
+          <style>{`[style*="opacity:0"],[style*="opacity: 0"]{opacity:1!important;transform:none!important}[style*="clip-path"]{clip-path:none!important}`}</style>
+        </noscript>
+        <MotionProvider>
+        <QuoteProvider>
+          <a href="#contenido" className="skip-link">
+            Saltar al contenido
+          </a>
+          <Header />
+          <main id="contenido" tabIndex={-1}>
+            {children}
+          </main>
+          <Footer />
+          <StickyCta />
+        </QuoteProvider>
+        </MotionProvider>
 
-gtag('js', new Date());
-gtag('config', '${GA_ID}');`}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()) }}
+        />
+        {GA_ID && INDEXABLE && (
+          <>
+            <Script strategy="lazyOnload" src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+            <Script id="ga-init" strategy="lazyOnload">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
             </Script>
           </>
         )}
